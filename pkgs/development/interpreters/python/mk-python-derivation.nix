@@ -19,6 +19,7 @@
 , pythonNamespacesHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
+, requirementsInstallHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -84,8 +85,12 @@
 # "flit" : Install a flit package. This builds a wheel.
 # "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
 # "egg": Install a package from an egg.
+# "requirements": Install requirements files.
 # "other" : Provide your own buildPhase and installPhase.
 , format ? "setuptools"
+
+# Requirements files
+, requirements ? []
 
 , meta ? {}
 
@@ -131,7 +136,9 @@ let
       wheelUnpackHook
     ] ++ lib.optionals (format == "egg") [
       eggUnpackHook eggBuildHook eggInstallHook
-    ] ++ lib.optionals (!(format == "other") || dontUsePipInstall) [
+    ] ++ lib.optionals (format == "requirements") [
+      requirementsInstallHook
+    ] ++ lib.optionals (!(format == "other") || !(format == "requirements") || dontUsePipInstall) [
       pipInstallHook
     ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
       # This is a test, however, it should be ran independent of the checkPhase and checkInputs

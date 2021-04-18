@@ -122,6 +122,15 @@ in rec {
       };
     } ./python-remove-tests-dir-hook.sh) {};
 
+  requirementsInstallHook = callPackage ({ pip }:
+    makeSetupHook {
+      name = "requirements-install-hook";
+      deps = [ pip ];
+      substitutions = {
+        inherit pythonInterpreter;
+      };
+    } ./requirements-install-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {
       name = "setuptools-setup-hook";

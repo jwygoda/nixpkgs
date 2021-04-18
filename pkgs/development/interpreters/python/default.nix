@@ -57,6 +57,7 @@ with pkgs;
               pythonRecompileBytecodeHook
               pythonRemoveBinBytecodeHook
               pythonRemoveTestsDirHook
+              requirementsInstallHook
               setuptoolsBuildHook
               setuptoolsCheckHook
               venvShellHook
